@@ -1,6 +1,6 @@
-# Altheajs Hackathon Workshop
+# Altheajs iFi Hackathon Workshop
 
-This website was used for the Althea-L1 IFI Hackathon workshop to demonstrate the use of altheajs.
+This website was used for the Althea-L1 iFi Hackathon workshop to demonstrate the use of altheajs.
 
 ## Project Setup
 
