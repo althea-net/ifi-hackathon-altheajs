@@ -2,6 +2,20 @@
 
 This website was used for the Althea-L1 iFi Hackathon workshop to demonstrate the use of altheajs.
 
+## Workshop Recording
+
+If you missed the workshop or want to view it again and follow along, (watch it on YouTube here)[https://www.youtube.com/watch?v=Q1f0e6McIPU] or on (Twitter/X)[https://twitter.com/AltheaNetwork/status/1694379423733301462?s=20].
+
+## Questions / Comments
+
+Contact Christian or Justin (through Discord)[https://discord.gg/hHx7HxcycFA] with any questions or comments about the workshop. If you are working on a website that interacts with Althea-L1 and having difficulty we'd be happy to answer any questions regarding that as well.
+
+## Starting from where the workshop left off
+
+To view the code written during the workshop, check out the workshop branch:
+
+* `git checkout workshop`
+
 ## Project Setup
 
 First, [install Node.js with `npm` and `npx`](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm).
