@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import SubmitMsgSend from './SubmitMsgSend';
+import SubmitMsgLiquify from './SubmitMsgLiquify';
 
 const Tab = styled.button`
     font-size: 15px;
@@ -23,7 +24,7 @@ const ButtonGroup = styled.div`
     display:flex;
 `;
 
-const types = ['Bank Send'];
+const types = ['Bank Send', 'Microtx Liquify'];
 
 export default function Tabs() {
     const [active, setActive] = useState(types[0])
@@ -37,6 +38,7 @@ export default function Tabs() {
                 ))}
             </ButtonGroup>
             {active === types[0] ? (<SubmitMsgSend />): (null)}
+            {active === types[1] ? (<SubmitMsgLiquify />): (null)}
         </>
     )
 }

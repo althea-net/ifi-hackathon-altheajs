@@ -1,5 +1,5 @@
 import {
-  createTxMsgSend,
+    createTxMsgLiquify,
 } from '@althea-net/transactions'
 import React, { useState } from 'react';
 import { connectMetamask, metamaskInstalled, verifyPubKey, GetCurrPubkey, GetCurrAccount, SignEIP712CosmosTx } from '../services/metamask';
@@ -7,22 +7,17 @@ import { BroadcastEIP712Tx } from '../services/broadcast';
 import getAccountInfo from '../services/accountInfo';
 import { altheaToEth, ethToAlthea } from '@althea-net/address-converter';
 
-// Presents info about the user's metamask account and allows Bank MsgSend EIP-712 submission. Currently the transaction confirmation is only output to console!
-export default function SubmitMsgSend() {
+export default function SubmitMsgLiquify() {
     const [mmConnected, setMmConnected] = useState(false) // Is metamask enabled and have the accounts been fetched?
     const [chainId, setChainId] = useState(defaultChain.chainId) // 417834 OR user input to Chain ID field
     const [cosmosChainId, setCosmosChainId] = useState(defaultChain.cosmosChainId) // althea_417834-3 OR user input to Cosmos Chain ID field
     const [fee, setFee] = useState(defaultFee.amount) // defaultFee.amount OR user input to Fee field
     const [gas, setGas] = useState(defaultFee.gas) // defaultFee.gas OR user input to Gas field
-    const [memo, setMemo] = useState("") // a string from the Memo field
-    const [to, setTo] = useState("") // a string like 'althea1...' from the To field
-    const [amount, setAmount] = useState("") // an integer amount from the Amount field
     const [account, setAccount] = useState("") // The user's fetched MM account address converted from 0x... to althea1...
     const [accountInfo, setAccountInfo] = useState({}) // More info about the user's account like sequence pubkey and account number
     const [currPubkey, setCurrPubkey] = useState("") // The pubkey is not reliable so we fetch it from MM
-
-    function onSubmit() {
-        const { context, tx } = createEIP712Params(account, accountInfo.sequence, accountInfo.account_number, currPubkey, fee, gas, chainId, cosmosChainId, memo, to, amount);
+   function onSubmit() {
+        const { context, tx } = createEIP712Params(account, accountInfo.sequence, accountInfo.account_number, currPubkey, fee, gas, chainId, cosmosChainId);
         SignEIP712CosmosTx(context, tx).then((signed) => {
             BroadcastEIP712Tx(signed).then((res) => {
                 console.log("Tx submitted:", JSON.stringify(res))
@@ -71,7 +66,6 @@ export default function SubmitMsgSend() {
 
         })
     }
-
     return (
         <>
             {metamaskInstalled() ? (
@@ -83,7 +77,7 @@ export default function SubmitMsgSend() {
                     {currPubkey ? (<label>Verified Pubkey:{currPubkey}</label>) : null}
                     {account ? (
                         <label>Account: {account} | {altheaToEth(account)}</label>
-                    ):null}
+                    ) : null}
 
                     {mmConnected && currPubkey ? (
                         <div className='SubmitTx'>
@@ -93,12 +87,6 @@ export default function SubmitMsgSend() {
                             <label>Cosmos Chain ID:<input value={cosmosChainId} onChange={e => setCosmosChainId(e.target.value)} /></label>
                             <br />
                             <label>Gas:<input value={gas} onChange={e => setGas(e.target.value)} /></label>
-                            <br />
-                            <label>Memo:<input value={memo} onChange={e => setMemo(e.target.value)} /></label>
-                            <br />
-                            <label>To:<input value={to} onChange={e => setTo(e.target.value)} /></label>
-                            <br />
-                            <label>Amount:<input value={amount} onChange={e => setAmount(e.target.value)} /></label>
                             <br />
                             <label>Fee:<input value={fee} onChange={e => setFee(e.target.value)} /></label>
                             <br />
@@ -112,6 +100,7 @@ export default function SubmitMsgSend() {
         </>
     )
 }
+
 
 const defaultFee = {
     amount: '4000000000000000',
@@ -147,10 +136,8 @@ function createEIP712Params(account, sequence, accountNumber, pubKey, feeAmount,
     }
 
     const params = {
-        destinationAddress: to,
-        amount: amount,
-        denom: 'aalthea',
+        sender: account,
     }
-    const tx = createTxMsgSend(txcontext, params)
+    const tx = createTxMsgLiquify(txcontext, params)
     return {context: txcontext, tx: tx}
 }
